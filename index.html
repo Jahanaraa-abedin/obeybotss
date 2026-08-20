@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBEYBOTS — AI Skills Interviewer & Talent Intelligence</title>
+    <meta name="description" content="Interactive AI-style talent interviewer for the MattyJacks ecosystem. Discover skills, score capabilities, match roles & services, and generate Shopify Liquid profiles.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-logo" onclick="switchView('landing')">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">OBEYBOTS</span>
+                <span class="badge-ecosystem">MattyJacks Ecosystem</span>
+            </div>
+            <nav class="main-nav">
+                <button class="nav-btn active" data-target="landing" onclick="switchView('landing')">Home</button>
+                <button class="nav-btn" data-target="interview" onclick="startInterview()">Interview</button>
+                <button class="nav-btn" data-target="results" onclick="switchView('results')">Results</button>
+                <button class="nav-btn" data-target="liquid" onclick="switchView('liquid')">Liquid Code</button>
+                <button class="nav-btn" data-target="data" onclick="switchView('data')">Data Tools</button>
+            </nav>
+            <div class="header-actions">
+                <button class="btn btn-outline btn-sm" onclick="startInterview()">Start Interview</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- 1. LANDING SECTION -->
+        <section id="landing-section" class="view-section active">
+            <div class="hero-container">
+                <div class="hero-badge">AI Talent Intelligence Engine</div>
+                <h1 class="hero-title">Discover What You’re <span class="gradient-text">Really Good At.</span></h1>
+                <p class="hero-subheading">
+                    OBEYBOTS conducts a structured, adaptive interview to evaluate your technical skills, work history, and core capabilities across the MattyJacks ecosystem — matching you to ideal roles, services, and storefront profile sections.
+                </p>
+
+                <div class="hero-cta-group">
+                    <button class="btn btn-primary btn-lg" onclick="startInterview()">
+                        <span>Start Interview</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    <button id="hero-resume-btn" class="btn btn-secondary btn-lg hidden" onclick="resumeInterview()">
+                        <span>Resume Saved Interview</span>
+                    </button>
+                </div>
+
+                <!-- Ecosystem Focus Domains -->
+                <div class="ecosystem-banner">
+                    <div class="banner-label">Supported Skill Domains:</div>
+                    <div class="domain-pills">
+                        <span class="pill">Web Development</span>
+                        <span class="pill">Shopify & Liquid</span>
+                        <span class="pill">AI & Prompt Engineering</span>
+                        <span class="pill">Research & Data</span>
+                        <span class="pill">Automation</span>
+                        <span class="pill">Social Media & Content</span>
+                        <span class="pill">Graphic Design</span>
+                        <span class="pill">Virtual Assistance</span>
+                        <span class="pill">Customer Support</span>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Adaptive Question Engine</h3>
+                        <p>Questions dynamically adapt to your selected focus areas, skipping irrelevant topics and deep-diving into your actual tools.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Deterministic Role Matching</h3>
+                        <p>Evaluates your responses against 15 specialized roles with match percentage, confidence tier, and clear logical justification.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛍️</div>
+                        <h3>Shopify Liquid Forge</h3>
+                        <p>Compiles your interview data directly into production-ready Shopify Liquid theme section code with customizable JSON schema.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>100% Private & Local</h3>
+                        <p>Zero external databases or API keys. Your data stays strictly inside your browser with full JSON/TXT export controls.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. INTERVIEW SECTION -->
+        <section id="interview-section" class="view-section">
+            <div class="interview-container">
+
+                <!-- Header & Progress -->
+                <div class="interview-header-card">
+                    <div class="interview-meta">
+                        <span id="stage-badge" class="badge-stage">Category: Basic Info</span>
+                        <span id="question-counter" class="question-count">Question 1 of 14</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-percentage-row">
+                        <span class="progress-label">Completion Status</span>
+                        <span id="progress-text" class="progress-value">0% Complete</span>
+                    </div>
+                </div>
+
+                <!-- Active Question Container -->
+                <div id="question-card" class="question-card">
+                    <div id="question-container" class="question-body">
+                        <!-- Rendered Dynamically via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Interview Controls -->
+                <div class="interview-controls">
+                    <button id="btn-back" class="btn btn-secondary" onclick="previousQuestion()" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        <span>Back</span>
+                    </button>
+                    <div class="control-right-group">
+                        <button id="btn-save-progress" class="btn btn-outline" onclick="saveProgress()">Save Progress</button>
+                        <button id="btn-exit" class="btn btn-ghost" onclick="exitInterview()">Exit</button>
+                        <button id="btn-continue" class="btn btn-primary" onclick="nextQuestion()">
+                            <span>Continue</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. RESULTS SECTION -->
+        <section id="results-section" class="view-section">
+            <div class="results-container">
+
+                <!-- Profile Overview Header -->
+                <div class="profile-hero-card">
+                    <div class="profile-header-top">
+                        <div class="avatar-box">
+                            <span id="res-avatar-initials">OB</span>
+                        </div>
+                        <div class="profile-header-info">
+                            <h2 id="res-candidate-name">Candidate Name</h2>
+                            <p id="res-headline" class="profile-headline">Professional Headline</p>
+                            <div class="profile-meta-tags">
+                                <span id="res-location-tag" class="meta-tag">📍 Location</span>
+                                <span id="res-timezone-tag" class="meta-tag">🕒 Timezone</span>
+                                <span id="res-experience-tag" class="meta-tag">💼 0 Yrs Exp</span>
+                            </div>
+                        </div>
+                        <div class="overall-score-box">
+                            <div class="score-label">OVERALL MATCH SCORE</div>
+                            <div id="res-overall-score" class="score-value">0%</div>
+                            <div id="res-tier-badge" class="tier-badge">Developing Talent</div>
+                        </div>
+                    </div>
+                    <div class="profile-summary-box">
+                        <h4>Executive Summary</h4>
+                        <p id="res-summary">Complete the interview to generate your AI talent summary.</p>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="results-grid">
+
+                    <!-- Column 1: Skills & Capabilities -->
+                    <div class="results-col">
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Primary & Secondary Skillsets</h3>
+                                <span id="res-primary-badge" class="badge-accent">Primary: None</span>
+                            </div>
+                            <div class="card-body">
+                                <h4>Primary Skills (Evaluated & Weighted)</h4>
+                                <div id="res-primary-skills-list" class="skills-list">
+                                    <!-- Rendered Dynamically -->
+                                </div>
+
+                                <h4 class="mt-4">Secondary & Complementary Skills</h4>
+                                <div id="res-secondary-skills-list" class="skills-list">
+                                    <!-- Rendered Dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card mt-4">
+                            <div class="card-header">
+                                <h3>Strengths & Development Areas</h3>
+                            </div>
+                            <div class="card-body grid-2col">
+                                <div>
+                                    <h4 class="text-success">Key Strengths</h4>
+                                    <ul id="res-strengths-list" class="styled-list">
+                                        <!-- Rendered Dynamically -->
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-warning">Development Areas</h4>
+                                    <ul id="res-development-list" class="styled-list">
+                                        <!-- Rendered Dynamically -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card mt-4">
+                            <div class="card-header">
+                                <h3>Work Style & Preferences</h3>
+                            </div>
+                            <div class="card-body">
+                                <p id="res-workstyle">Work style details will be displayed after completing the interview.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Column 2: Role Matches & Services -->
+                    <div class="results-col">
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recommended MattyJacks Roles</h3>
+                                <span class="badge-info">Deterministic Scoring</span>
+                            </div>
+                            <div id="res-roles-list" class="roles-container">
+                                <!-- Rendered Dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card mt-4">
+                            <div class="card-header">
+                                <h3>Actionable Client Services</h3>
+                                <span class="badge-success">Service Offerings</span>
+                            </div>
+                            <div id="res-services-list" class="services-grid">
+                                <!-- Rendered Dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Quick Action Bar -->
+                <div class="results-actions-bar">
+                    <button class="btn btn-secondary" onclick="switchView('liquid')">View Shopify Liquid Code</button>
+                    <button class="btn btn-secondary" onclick="exportTXT()">Export TXT</button>
+                    <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+                    <button class="btn btn-primary" onclick="printProfile()">Print Profile</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. LIQUID CODE VIEWER SECTION -->
+        <section id="liquid-section" class="view-section">
+            <div class="liquid-container">
+                <div class="section-header">
+                    <h2>Shopify Liquid Code Generator</h2>
+                    <p>Production-ready Liquid storefront section compiled deterministically from your interview answers. Includes CSS and customizable Theme Editor `{% schema %}`.</p>
+                </div>
+
+                <div class="liquid-toolbar">
+                    <span class="code-filename">obeybots-worker-profile.liquid</span>
+                    <div class="toolbar-btns">
+                        <button class="btn btn-secondary btn-sm" onclick="copyLiquid()">Copy Liquid Code</button>
+                        <button class="btn btn-primary btn-sm" onclick="downloadLiquid()">Download .liquid File</button>
+                    </div>
+                </div>
+
+                <div class="code-editor-container">
+                    <pre><code id="liquid-code-display" class="code-block">{% comment %}
+  ObeyBots Worker Profile Section
+  Generated for MattyJacks Ecosystem
+{% endcomment %}
+<!-- Complete interview to compile Shopify Liquid code --></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. DATA SECTION -->
+        <section id="data-section" class="view-section">
+            <div class="data-container">
+                <div class="section-header">
+                    <h2>Data Management & Local Persistence</h2>
+                    <p>All interview data remains 100% inside your browser (`localStorage`). You can backup, import, export, or print your profile at any time.</p>
+                </div>
+
+                <div class="data-cards-grid">
+                    <div class="data-card">
+                        <div class="data-card-icon">📄</div>
+                        <h3>Export Text Profile (.txt)</h3>
+                        <p>Generate a human-readable text document containing all interview answers, scores, role matches, strengths, and Liquid code.</p>
+                        <button class="btn btn-secondary btn-block" onclick="exportTXT()">Export TXT Document</button>
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-card-icon">📥</div>
+                        <h3>Import Profile (.txt)</h3>
+                        <p>Restore a previously exported ObeyBots text profile directly in your browser. Reads local files safely with zero upload.</p>
+                        <button class="btn btn-secondary btn-block" onclick="triggerImportTXT()">Import TXT File</button>
+                        <input type="file" id="txt-file-input" accept=".txt" class="hidden" onchange="importTXT(event)">
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-card-icon">⚙️</div>
+                        <h3>Export Data (.json)</h3>
+                        <p>Export the raw structured JSON state payload for developers, backups, or system integrations.</p>
+                        <button class="btn btn-secondary btn-block" onclick="exportJSON()">Export JSON File</button>
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-card-icon">🖨️</div>
+                        <h3>Print Profile</h3>
+                        <p>Open browser print dialog optimized with standard resume stylesheet formatting.</p>
+                        <button class="btn btn-secondary btn-block" onclick="printProfile()">Print Profile</button>
+                    </div>
+
+                    <div class="data-card danger-card">
+                        <div class="data-card-icon">⚠️</div>
+                        <h3>Reset Interview</h3>
+                        <p>Clear all local state, saved progress, and interview answers. Asks for confirmation before wiping data.</p>
+                        <button class="btn btn-danger btn-block" onclick="resetInterview()">Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="footer-logo">🤖 OBEYBOTS</span>
+                <span class="footer-tagline">Talent intelligence, powered by structured interviews.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://mattyjacks.com/upwork" target="_blank" rel="noopener noreferrer" class="mattyjacks-link">
+                    <span>Work with us on Upwork</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
